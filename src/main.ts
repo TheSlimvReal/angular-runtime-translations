@@ -1,19 +1,27 @@
 import { Component } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import 'zone.js';
+import { staticText } from "./static-file";
+import { DatePipe } from "@angular/common";
+import '@angular/localize/init';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   template: `
-    <h1>Hello from {{ name }}!</h1>
-    <a target="_blank" href="https://angular.dev/overview">
-      Learn more about Angular
-    </a>
+      <h1 i18n>Angular runtime translations!</h1>
+      <p>{{ componentText }}</p>
+      <p>{{ staticText }}</p>
+      <p>{{ date | date }}</p>
   `,
+  imports: [
+    DatePipe
+  ]
 })
 export class App {
-  name = 'Angular';
+  componentText = $localize`I am text from a component variable`;
+  staticText = staticText;
+  date = new Date()
 }
 
 bootstrapApplication(App);
