@@ -1,8 +1,5 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "cli": {
-    "analytics": "1e1de97b-a744-405a-8b5a-0397bb3d01ce"
-  },
   "newProjectRoot": "projects",
   "projects": {
     "demo": {
@@ -26,7 +23,7 @@
             }
           },
           "options": {
-            "assets": [],
+            "assets": ["src/assets"],
             "index": "src/index.html",
             "browser": "src/main.ts",
             "outputPath": "dist/demo",
@@ -46,6 +43,12 @@
             }
           },
           "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "buildTarget": "demo:build"
+          }
         }
       },
       "prefix": "app",

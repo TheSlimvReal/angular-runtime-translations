@@ -2,8 +2,10 @@ import { Component } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import 'zone.js';
 import { staticText } from "./static-file";
-import { DatePipe } from "@angular/common";
+import { DatePipe, registerLocaleData } from "@angular/common";
 import '@angular/localize/init';
+import { xliffToJson } from "./xliff-to-json";
+import { loadTranslations } from "@angular/localize";
 
 @Component({
   selector: 'app-root',
@@ -24,4 +26,25 @@ export class App {
   date = new Date()
 }
 
-bootstrapApplication(App);
+const initialLocale = "de"
+
+initLanguage(initialLocale)
+  .then(() => bootstrapApplication(App))
+
+async function initLanguage(locale: string): Promise<void> {
+  if (locale === "en") {
+    return;
+  }
+  const json = await fetch("/assets/messages." + locale + ".xlf")
+    .then((r) => r.text())
+    .then((t) => xliffToJson(t))
+  loadTranslations(json);
+  $localize.locale = locale;
+  // This is needed for locale-aware components & pipes to work.
+  // Add the required locales to `webpackInclude` to keep the bundle size small
+  const localeModule = await import(
+    /* webpackInclude: /(fr|de|it)\.mjs/ */
+    `../node_modules/@angular/common/locales/de`
+    );
+  registerLocaleData(localeModule.default);
+}
