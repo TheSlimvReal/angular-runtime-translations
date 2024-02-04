@@ -1,47 +1,37 @@
-import { Component, LOCALE_ID } from '@angular/core';
+import { LOCALE_ID } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import 'zone.js';
-import { staticText } from "./static-file";
-import { DatePipe, registerLocaleData } from "@angular/common";
+import { registerLocaleData } from "@angular/common";
 import '@angular/localize/init';
 import { xliffToJson } from "./xliff-to-json";
 import { loadTranslations } from "@angular/localize";
 
-@Component({
-  selector: 'app-root',
-  standalone: true,
-  template: `
-      <h1 i18n>Angular runtime translations!</h1>
-      <p>{{ componentText }}</p>
-      <p>{{ staticText }}</p>
-      <p>{{ date | date }}</p>
-  `,
-  imports: [
-    DatePipe
-  ]
-})
-export class App {
-  componentText = $localize`I am text from a component variable`;
-  staticText = staticText;
-  date = new Date()
-}
+// Read locale from local storage before app initialization
+const appLang = localStorage.getItem("locale") || "en"
 
-const initialLocale = "de"
-
-initLanguage(initialLocale)
-  .then(() => bootstrapApplication(App, {
-    providers: [{provide: LOCALE_ID, useValue: initialLocale}]
+// Init provided language
+initLanguage(appLang)
+  // Only load text after locale is initialized to translate static file
+  .then(() => import("./app.component"))
+  .then((comp) => bootstrapApplication(comp.App, {
+    providers: [{provide: LOCALE_ID, useValue: appLang}]
   }))
 
 async function initLanguage(locale: string): Promise<void> {
   if (locale === "en") {
+    // Default behavior, no changes required
     return;
   }
+  // Fetch XLIFF translation file and transform to JSON format (JSON translations can be used directly)
   const json = await fetch("/assets/messages." + locale + ".xlf")
     .then((r) => r.text())
     .then((t) => xliffToJson(t))
+
+  // Initialize translation
   loadTranslations(json);
   $localize.locale = locale;
+
+  // Load required locale module (needs to be adjusted for different locales)
   const localeModule = await import(
     `../node_modules/@angular/common/locales/de`
     );
