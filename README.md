@@ -1,3 +1,8 @@
-# angular-runtime-translations
+# Angular Runtime Translations
 
-[Edit in StackBlitz next generation editor ⚡️](https://stackblitz.com/~/github.com/TheSlimvReal/angular-runtime-translations)
+Start app by running:
+
+- `npm ci`
+- `npm run start`
+
+[Edit in StackBlitz ⚡️](https://stackblitz.com/~/github.com/TheSlimvReal/angular-runtime-translations)
