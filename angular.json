@@ -3,6 +3,14 @@
   "newProjectRoot": "projects",
   "projects": {
     "demo": {
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "de": {
+            "translation": "src/assets/messages.de.xlf"
+          }
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
@@ -23,12 +31,16 @@
             }
           },
           "options": {
-            "assets": ["src/assets"],
+            "assets": [
+              "src/assets"
+            ],
             "index": "src/index.html",
             "browser": "src/main.ts",
             "outputPath": "dist/demo",
             "scripts": [],
-            "styles": ["src/global_styles.css"],
+            "styles": [
+              "src/global_styles.css"
+            ],
             "tsConfig": "src/tsconfig.app.json"
           }
         },

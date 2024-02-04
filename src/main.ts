@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, LOCALE_ID } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import 'zone.js';
 import { staticText } from "./static-file";
@@ -29,7 +29,9 @@ export class App {
 const initialLocale = "de"
 
 initLanguage(initialLocale)
-  .then(() => bootstrapApplication(App))
+  .then(() => bootstrapApplication(App, {
+    providers: [{provide: LOCALE_ID, useValue: initialLocale}]
+  }))
 
 async function initLanguage(locale: string): Promise<void> {
   if (locale === "en") {
@@ -40,10 +42,7 @@ async function initLanguage(locale: string): Promise<void> {
     .then((t) => xliffToJson(t))
   loadTranslations(json);
   $localize.locale = locale;
-  // This is needed for locale-aware components & pipes to work.
-  // Add the required locales to `webpackInclude` to keep the bundle size small
   const localeModule = await import(
-    /* webpackInclude: /(fr|de|it)\.mjs/ */
     `../node_modules/@angular/common/locales/de`
     );
   registerLocaleData(localeModule.default);

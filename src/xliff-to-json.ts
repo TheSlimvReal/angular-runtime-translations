@@ -2,7 +2,6 @@
 import { xliff12ToJs } from "xliff"
 
 export async function xliffToJson(translations: any) {
-  console.log("translations", translations)
   const parserResult = await xliff12ToJs(translations, {
     captureSpacesBetweenElements: true,
   });
